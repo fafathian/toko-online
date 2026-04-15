@@ -12,13 +12,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
+use Filament\Models\Contracts\FilamentUser;
 
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Model;
 
 #[Fillable(['name', 'email', 'phone', 'password', 'postal_code'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable implements HasTenants
+class User extends Authenticatable implements HasTenants, FilamentUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -66,5 +67,19 @@ class User extends Authenticatable implements HasTenants
     public function carts()
     {
         return $this->hasMany(Cart::class);
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if ($panel->getId() === 'admin') {
+            // Ganti 'admin' menjadi 'super_admin' sesuai tabel roles kamu
+            return $this->hasRole('super_admin');
+        }
+
+        if ($panel->getId() === 'seller') {
+            return $this->hasRole('seller');
+        }
+
+        return true;
     }
 }
