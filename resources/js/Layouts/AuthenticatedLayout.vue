@@ -1,0 +1,63 @@
+<script setup>
+import { ref } from 'vue';
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
+import Dropdown from '@/Components/Dropdown.vue';
+import DropdownLink from '@/Components/DropdownLink.vue';
+import NavLink from '@/Components/NavLink.vue';
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import { Link, usePage } from '@inertiajs/vue3'; // Tambahkan usePage untuk akses props lebih aman
+
+const showingNavigationDropdown = ref(false);
+const auth = usePage().props.auth; // Helper agar akses user lebih stabil
+</script>
+
+<template>
+    <div class="min-h-screen bg-gray-100">
+        <nav class="border-b border-gray-100 bg-white shadow-sm">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <div class="flex h-16 justify-between">
+                    <div class="flex">
+                        <div class="flex shrink-0 items-center">
+                            <Link :href="route('home')" class="text-2xl font-black text-indigo-600">
+                                Z-STORE
+                            </Link>
+                        </div>
+
+                        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <NavLink href="/orders" :active="$page.url.startsWith('/orders')">
+                                Pesanan Saya
+                            </NavLink>
+                        </div>
+                    </div>
+
+                    <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div class="relative ms-3">
+                            <Dropdown align="right" width="48">
+                                <template #trigger>
+                                    <button type="button"
+                                        class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 focus:outline-none transition">
+                                        {{ $page.props.auth.user.name }}
+                                        <svg class="ms-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </template>
+                                <template #content>
+                                    <DropdownLink :href="route('logout')" method="post" as="button">Log Out
+                                    </DropdownLink>
+                                </template>
+                            </Dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main>
+            <slot />
+        </main>
+    </div>
+</template>

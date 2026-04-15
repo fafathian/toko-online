@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Filament\Seller\Resources\Orders\Pages;
+
+use App\Filament\Seller\Resources\Orders\OrderResource;
+use Filament\Actions\DeleteAction;
+use Filament\Resources\Pages\EditRecord;
+
+class EditOrder extends EditRecord
+{
+    protected static string $resource = OrderResource::class;
+
+    protected function getHeaderActions(): array
+    {
+        return [
+            // Jangan tambahkan DeleteAction agar seller tidak hapus order
+        ];
+    }
+
+    // Redirect ke index setelah save
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+}
