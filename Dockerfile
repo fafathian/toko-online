@@ -1,9 +1,10 @@
 # Menggunakan image resmi PHP 8.2 dengan Apache
 FROM php:8.2-apache
 
-# 1. Install system dependencies & Node.js (untuk Vue/Inertia)
+# 1. Install system dependencies & Node.js (TAMBAHKAN libicu-dev di sini)
 RUN apt-get update && apt-get install -y \
     libzip-dev \
+    libicu-dev \
     zip \
     unzip \
     git \
@@ -14,8 +15,9 @@ RUN apt-get update && apt-get install -y \
 # 2. Enable Apache mod_rewrite untuk routing Laravel
 RUN a2enmod rewrite
 
-# 3. Install PHP extensions yang dibutuhkan Laravel & TiDB (MySQL)
-RUN docker-php-ext-install pdo_mysql zip pcntl
+# 3. Install PHP extensions (TAMBAHKAN intl dan bcmath di sini)
+RUN docker-php-ext-configure intl \
+    && docker-php-ext-install pdo_mysql zip pcntl intl bcmath
 
 # 4. Set working directory
 WORKDIR /var/www/html
@@ -26,7 +28,7 @@ COPY . .
 # 6. Install Composer secara global
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 7. Install dependensi PHP (tanpa package dev untuk production)
+# 7. Install dependensi PHP
 RUN composer install --no-dev --optimize-autoloader
 
 # 8. Install dependensi Node.js dan Build aset Vue/Inertia
