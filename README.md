@@ -42,15 +42,7 @@ Z-STORE is a modern, scalable Multi-Vendor E-Commerce platform built with the La
 
 ## 🚀 Live Demo
 
-> **[Insert your Render URL here, e.g., https://z-store-portfolio.onrender.com]**
-
-## 📸 Screenshots
-
-_(Include 3-4 high-quality screenshots of your application here)_
-
-|          Multi-Vendor Checkout           |              Real-time Chat              |          Thermal Shipping Label          |
-| :--------------------------------------: | :--------------------------------------: | :--------------------------------------: |
-| <img src="link_to_image_1" width="250"/> | <img src="link_to_image_2" width="250"/> | <img src="link_to_image_3" width="250"/> |
+> https://z-store-a9vl.onrender.com/
 
 ## 💻 Local Setup & Installation
 
