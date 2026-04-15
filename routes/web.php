@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Artisan;
 
 
 Route::get('/', function () {
@@ -156,6 +157,20 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/fix-storage', function () {
+    try {
+        // 1. Membuat link folder storage ke public
+        Artisan::call('storage:link');
+        
+        // 2. Membersihkan cache agar variabel baru terbaca
+        Artisan::call('optimize:clear');
+
+        return "Storage Link Berhasil Dibuat & Cache Dibersihkan! 🎉";
+    } catch (\Exception $e) {
+        return "Gagal: " . $e->getMessage();
+    }
 });
 
 // Mengimpor rute Login, Register, Logout, dll.
