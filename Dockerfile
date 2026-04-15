@@ -46,8 +46,12 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # 11. Jalankan storage link SAAT BUILD (Ini kuncinya!)
 RUN php artisan storage:link --force
 
-# 12. Berikan izin tulis penuh pada folder uploads
-RUN chmod -R 775 /var/www/html/storage /var/www/html/public/storage
+# Buat folder storage di dalam public secara manual
+RUN mkdir -p /var/www/html/public/storage
+
+# Beri izin akses penuh ke folder tersebut
+RUN chown -R www-data:www-data /var/www/html/public/storage
+RUN chmod -R 775 /var/www/html/public/storage
 
 # 11. Expose port 80 untuk Render
 EXPOSE 80
