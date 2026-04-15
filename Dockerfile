@@ -40,8 +40,14 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# 10. Atur permission untuk folder storage dan cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# 10. Atur permission untuk folder storage dan cache SECARA TOTAL
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
+
+# 11. Jalankan storage link SAAT BUILD (Ini kuncinya!)
+RUN php artisan storage:link --force
+
+# 12. Berikan izin tulis penuh pada folder uploads
+RUN chmod -R 775 /var/www/html/storage /var/www/html/public/storage
 
 # 11. Expose port 80 untuk Render
 EXPOSE 80
