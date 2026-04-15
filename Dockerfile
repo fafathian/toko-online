@@ -40,18 +40,22 @@ ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# 10. Atur permission untuk folder storage dan cache SECARA TOTAL
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/public
-
-# 11. Jalankan storage link SAAT BUILD (Ini kuncinya!)
-RUN php artisan storage:link --force
-
-# Buat folder storage di dalam public secara manual
+# 10. Buat folder secara fisik dulu sebelum di-link
 RUN mkdir -p /var/www/html/public/storage
+RUN mkdir -p /var/www/html/storage/app/public
 
-# Beri izin akses penuh ke folder tersebut
+# 11. Atur permission awal agar composer bisa jalan
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# 12. Install dependensi PHP (Sekarang harusnya lancar setelah config diperbaiki)
+RUN composer install --no-dev --optimize-autoloader
+
+# 13. Build Frontend
+RUN npm install && npm run build
+
+# 14. Jalankan storage link & atur permission akhir
+RUN php artisan storage:link --force
 RUN chown -R www-data:www-data /var/www/html/public/storage
-RUN chmod -R 775 /var/www/html/public/storage
+RUN chmod -R 775 /var/www/html/storage /var/www/html/public/storage
 
-# 11. Expose port 80 untuk Render
 EXPOSE 80
