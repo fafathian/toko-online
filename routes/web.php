@@ -173,5 +173,11 @@ Route::get('/fix-storage', function () {
     }
 });
 
+Route::get('/setup-database-rahasia', function () {
+    // Tambahkan --force karena Render biasanya di environment 'production'
+    Artisan::call('migrate:fresh', ['--force' => true]); 
+    return "Migrasi dari awal berhasil dijalankan!";
+});
+
 // Mengimpor rute Login, Register, Logout, dll.
 require __DIR__ . '/auth.php';
