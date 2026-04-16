@@ -11,10 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-Schema::create('provinces', function (Blueprint $table) {
-            $table->char('id', 2)->primary();
-            $table->string('name', 255);
-        });
 
         // 2. Buat Tabel Regencies
         Schema::create('regencies', function (Blueprint $table) {
@@ -61,6 +57,5 @@ Schema::create('provinces', function (Blueprint $table) {
         Schema::dropIfExists('villages');
         Schema::dropIfExists('districts');
         Schema::dropIfExists('regencies');
-        Schema::dropIfExists('provinces');
     }
 };
