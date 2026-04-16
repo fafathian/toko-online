@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('provinces', function (Blueprint $table) {
-            $table->id(); // Ini akan menyimpan ID dari RajaOngkir
-            $table->string('name');
-            $table->timestamps();
+            $table->char('id', 2)->primary(); // Primary ID BPS (Sesuai indonesia.sql)
+            $table->string('name', 255);
+            $table->timestamps(); // Anda bisa tetap memakai timestamps
         });
     }
 
