@@ -15,10 +15,10 @@ return new class extends Migration
         // 2. Buat Tabel Regencies
         Schema::create('regencies', function (Blueprint $table) {
             $table->char('id', 4)->primary();
-            $table->char('province_id', 2)->index('regencies_province_id_index');
+            $table->char('province_id', 2)->index();
             $table->string('name', 255);
 
-            $table->foreign('province_id', 'regencies_province_id_foreign')
+            $table->foreign('province_id')
                   ->references('id')->on('provinces')
                   ->cascadeOnUpdate()->restrictOnDelete();
         });
@@ -26,13 +26,13 @@ return new class extends Migration
         // 3. Buat Tabel Districts (Kecamatan + Postal Code)
         Schema::create('districts', function (Blueprint $table) {
             $table->char('id', 7)->primary();
-            $table->char('regency_id', 4)->index('districts_id_index');
+            $table->char('regency_id', 4)->index();
             $table->string('name', 255);
             
             // Kolom kustom Anda ada di sini
             $table->string('postal_code', 5)->nullable();
 
-            $table->foreign('regency_id', 'districts_regency_id_foreign')
+            $table->foreign('regency_id')
                   ->references('id')->on('regencies')
                   ->cascadeOnUpdate()->restrictOnDelete();
         });
@@ -40,10 +40,10 @@ return new class extends Migration
         // 4. Buat Tabel Villages
         Schema::create('villages', function (Blueprint $table) {
             $table->char('id', 10)->primary();
-            $table->char('district_id', 7)->index('villages_district_id_index');
+            $table->char('district_id', 7)->index();
             $table->string('name', 255);
 
-            $table->foreign('district_id', 'villages_district_id_foreign')
+            $table->foreign('district_id')
                   ->references('id')->on('districts')
                   ->cascadeOnUpdate()->restrictOnDelete();
         });
